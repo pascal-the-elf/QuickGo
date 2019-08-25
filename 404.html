@@ -83,11 +83,12 @@
     <script src="https://unpkg.com/quicklink@1.0.1/dist/quicklink.umd.js"></script>
     <script>
         var path = location.pathname;
-        fetch("https://quickgo-tw.firebaseio.com/QG/"+path.substr(1)+".json").then(r => {
+        var u = path.substr(1) || "AnonySend";
+        fetch("https://quickgo-tw.firebaseio.com/QG/"+u+".json").then(r => {
             if(r != "null")
                 return r.json();
             else
-                location.href = "https://google.com";
+                location.href = "https://anonysend.ml";
         }).then(d => {
             document.title = d.name;
             document.getElementsByClassName("name")[0].innerHTML = d.name;
