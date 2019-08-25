@@ -94,14 +94,17 @@
             document.getElementsByClassName("name")[0].innerHTML = d.name;
             document.getElementsByClassName("pic")[0].src = d.image;
             document.getElementsByClassName("description")[0].innerHTML = d.description;
+            var prefetch = [];
             for(var i = 0; i < d.url.length; i++) {
                 let a = document.createElement("a");
                 a.classList.add("w3-button", "w3-round", "w3-border");
                 a.href = d.url[i].location;
+                prefetch.push(d.url[i].location);
                 a.innerHTML = d.url[i].name;
                 a.target = "_blank";
                 document.getElementsByClassName("links")[0].appendChild(a);
             }
+            quicklink({urls: prefetch});
         });
     </script>
 </body>
