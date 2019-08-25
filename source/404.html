@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>LINKS</title>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <link href="https://www.w3schools.com/w3css/4/w3.css" rel="stylesheet">
+    <style>
+        html {
+            height: 100%;
+            width: 100%;
+        }
+        body {
+            min-height: 100%;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: flex-start;
+        }
+        .content {
+            margin: 10px 0 0 0;
+            flex: 1;
+        }
+        header {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: flex-start;
+        }
+        header > div {
+            width: 80%;
+            max-width: 600px;
+            text-align: center;
+        }
+        header img {
+            height: 30px;
+            width: 30px;
+            margin: -14px 0 0 0;
+        }
+        header .name {
+            font-size: 30px;
+        }
+        .links {
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: flex-start;
+        }
+        .links > a {
+            width: 80%;
+            margin: 0 0 16px 0;
+            display: block;
+        }
+        footer {
+            width: 80%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: flex-start;
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <header>
+            <div>
+                <img class="w3-round pic" />
+                <span class="name"></span>
+            </div>
+            <div>
+                <p class="description"></p>
+            </div>
+        </header>
+        <div class="links">
+        </div>
+    </div>
+    <footer></footer>
+    <script src="https://unpkg.com/quicklink@1.0.1/dist/quicklink.umd.js"></script>
+    <script>
+        var path = location.pathname;
+        var u = path.substr(1) || "AnonySend";
+        fetch("https://quickgo-tw.firebaseio.com/QG/"+u+".json").then(r => {
+            if(r != "null")
+                return r.json();
+            else
+                location.href = "https://anonysend.ml";
+        }).then(d => {
+            document.title = d.name;
+            document.getElementsByClassName("name")[0].innerHTML = d.name;
+            document.getElementsByClassName("pic")[0].src = d.image;
+            document.getElementsByClassName("description")[0].innerHTML = d.description;
+            for(var i = 0; i < d.url.length; i++) {
+                let a = document.createElement("a");
+                a.classList.add("w3-button", "w3-round", "w3-border");
+                a.href = d.url[i].location;
+                a.innerHTML = d.url[i].name;
+                a.target = "_blank";
+                document.getElementsByClassName("links")[0].appendChild(a);
+            }
+        });
+    </script>
+</body>
+</html>
