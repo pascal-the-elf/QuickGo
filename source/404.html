@@ -96,7 +96,7 @@
                 parse(d);
             });
         else parse(JSON.parse(localStorage["_Cache_"+u]));
-        function parse(json) {
+        function parse(d) {
             document.title = d.name;
             document.getElementsByClassName("name")[0].innerHTML = d.name;
             document.getElementsByClassName("pic")[0].src = d.image;
