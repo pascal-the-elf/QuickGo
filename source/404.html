@@ -16,7 +16,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            text-align: flex-start;
+            text-align: center;
             font-family: 'Microsoft JhengHei', 'PingFang', 'DroidSansFallback', Verdana, sans-serif;
             font-size: 16px;
         }
@@ -28,9 +28,8 @@
             width: 100%;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: flex-start;
             align-items: center;
-            text-align: flex-start;
         }
         header > div {
             width: 80%;
@@ -51,7 +50,6 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            text-align: flex-start;
         }
         .links > a {
             width: 80%;
@@ -63,7 +61,6 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            text-align: flex-start;
         }
     </style>
 </head>
@@ -88,12 +85,18 @@
         // script
         var path = location.pathname;
         var u = path.substr(1) || "AnonySend";
-        fetch("https://quickgo-tw.firebaseio.com/QG/"+u+".json").then(r => {
-            if(r != "null")
-                return r.json();
-            else
-                location.href = "https://anonysend.ml";
-        }).then(d => {
+        if(!localStorage["_Cache_"+u+"_session"] || parseInt(localStorage["_Cache_"+u+"_session"]) < Date.now())
+            fetch("https://quickgo-tw.firebaseio.com/QG/"+u+".json").then(r => {
+                r = r.json();
+                if(r) return r;
+                else location.href = "https://anonysend.ml/";
+            }).then(d => {
+                localStorage["_Cache_"+u] = JSON.stringify(d);
+                localStorage["_Cache_"+u+"_session"] = Date.now() + 60*1000;
+                parse(d);
+            });
+        else parse(JSON.parse(localStorage["_Cache_"+u]));
+        function parse(json) {
             document.title = d.name;
             document.getElementsByClassName("name")[0].innerHTML = d.name;
             document.getElementsByClassName("pic")[0].src = d.image;
@@ -109,7 +112,7 @@
                 document.getElementsByClassName("links")[0].appendChild(a);
             }
             quicklink({urls: prefetch});
-        });
+        }
     </script>
 </body>
 </html>
