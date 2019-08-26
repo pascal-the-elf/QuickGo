@@ -32,12 +32,18 @@
         // script
         var path = location.pathname;
         var u = path.substr(1) || "AnonySend";
-        fetch("https://quickgo-tw.firebaseio.com/QG/"+u+".json").then(r => {
-            if(r != "null")
-                return r.json();
-            else
-                location.href = "https://anonysend.ml";
-        }).then(d => {
+        if(!localStorage["_Cache_"+u+"_session"] || parseInt(localStorage["_Cache_"+u+"_session"]) < Date.now())
+            fetch("https://quickgo-tw.firebaseio.com/QG/"+u+".json").then(r => {
+                r = r.json();
+                if(r) return r;
+                else location.href = "https://anonysend.ml/";
+            }).then(d => {
+                localStorage["_Cache_"+u] = JSON.stringify(d);
+                localStorage["_Cache_"+u+"_session"] = Date.now() + 60*1000;
+                parse(d);
+            });
+        else parse(JSON.parse(localStorage["_Cache_"+u]));
+        function parse(json) {
             document.title = d.name;
             document.getElementsByClassName("name")[0].innerHTML = d.name;
             document.getElementsByClassName("pic")[0].src = d.image;
@@ -53,7 +59,7 @@
                 document.getElementsByClassName("links")[0].appendChild(a);
             }
             quicklink({urls: prefetch});
-        });
+        }
     </script>
 </body>
 </html>
